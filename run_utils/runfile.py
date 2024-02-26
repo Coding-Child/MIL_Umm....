@@ -81,21 +81,21 @@ def main(args):
         train_val_data = data.iloc[trn_val_idx]
         test_data = data.iloc[ts_idx]
 
-        train_size = int(len(train_val_data) * 0.01)
+        train_size = int(len(train_val_data) * 0.75)
         val_size = len(train_val_data) - train_size
 
         train_val_dataset = PathologyDataset(df=train_val_data, num_samples=num_sample, transform=transform_train)
         train_dataset, val_dataset = random_split(train_val_dataset, [train_size, val_size])
         test_dataset = PathologyDataset(df=test_data, num_samples=num_sample, transform=transform_test)
 
-        train_loader = DataLoader(val_dataset, 
+        train_loader = DataLoader(train_dataset, 
                                   batch_size=batch_size, 
                                   shuffle=True, 
                                   num_workers=4, 
                                   pin_memory=True, 
                                   drop_last=True, 
                                   collate_fn=collate_fn)
-        dev_loader = DataLoader(train_dataset, 
+        dev_loader = DataLoader(val_dataset, 
                                 batch_size=batch_size, 
                                 shuffle=False, 
                                 num_workers=4,
